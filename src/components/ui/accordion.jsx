@@ -1,65 +1,94 @@
-import * as React from "react"
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDownIcon } from "lucide-react"
+import React, { useState } from "react"
 
-import { cn } from "@/lib/utils"
-
-function Accordion({
-  ...props
-}) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
-}
-
-function AccordionItem({
-  className,
-  ...props
+// Simple Accordion component for beginners
+function Accordion({ 
+  children, 
+  type = "single", // "single" or "multiple" 
+  collapsible = false,
+  className = "", 
+  ...props 
 }) {
   return (
-    <AccordionPrimitive.Item
-      data-slot="accordion-item"
-      className={cn("border-b last:border-b-0", className)}
-      {...props}
-    />
+    <div className={`space-y-2 ${className}`} {...props}>
+      {React.Children.map(children, (child, index) =>
+        React.cloneElement(child, { 
+          accordionType: type,
+          collapsible: collapsible,
+          key: index 
+        })
+      )}
+    </div>
   )
 }
 
-function AccordionTrigger({
-  className,
-  children,
-  ...props
+function AccordionItem({ 
+  children, 
+  value,
+  accordionType,
+  collapsible,
+  className = "", 
+  ...props 
 }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <AccordionPrimitive.Header className="flex">
-      <AccordionPrimitive.Trigger
-        data-slot="accordion-trigger"
-        className={cn(
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
+    <div className={`border border-gray-200 rounded-lg ${className}`} {...props}>
+      {React.Children.map(children, child =>
+        React.cloneElement(child, { 
+          isOpen, 
+          onToggle: handleToggle,
+          value 
+        })
+      )}
+    </div>
   )
 }
 
-function AccordionContent({
-  className,
-  children,
-  ...props
+function AccordionTrigger({ 
+  children, 
+  isOpen, 
+  onToggle,
+  className = "", 
+  ...props 
 }) {
   return (
-    <AccordionPrimitive.Content
-      data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+    <button
+      className={`w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 transition-colors ${className}`}
+      onClick={onToggle}
       {...props}
     >
-      <div className={cn("pt-0 pb-4", className)}>{children}</div>
-    </AccordionPrimitive.Content>
+      <span className="font-medium">{children}</span>
+      <svg 
+        className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        fill="none" 
+        stroke="currentColor" 
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+  )
+}
+
+function AccordionContent({ 
+  children, 
+  isOpen,
+  className = "", 
+  ...props 
+}) {
+  if (!isOpen) return null
+
+  return (
+    <div className={`px-4 pb-3 border-t border-gray-200 ${className}`} {...props}>
+      <div className="pt-3">
+        {children}
+      </div>
+    </div>
   )
 }
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
-

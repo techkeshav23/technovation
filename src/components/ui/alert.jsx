@@ -1,58 +1,53 @@
-import * as React from "react"
-import { cva } from "class-variance-authority"
+import React from "react"
 
-import { cn } from "@/lib/utils"
-
-const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
-  {
-    variants: {
-      variant: {
-        default: "bg-card text-card-foreground",
-        destructive:
-          "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
+function Alert({ 
+  children, 
+  variant = "default", 
+  className = "", 
+  ...props 
+}) {
+  let alertClasses = "relative w-full rounded-lg border p-4 "
+  
+  if (variant === "default") {
+    alertClasses += "bg-blue-50 border-blue-200 text-blue-800 "
+  } else if (variant === "destructive") {
+    alertClasses += "bg-red-50 border-red-200 text-red-800 "
+  } else if (variant === "warning") {
+    alertClasses += "bg-yellow-50 border-yellow-200 text-yellow-800 "
+  } else if (variant === "success") {
+    alertClasses += "bg-green-50 border-green-200 text-green-800 "
   }
-)
 
-function Alert({ className, variant, ...props }) {
   return (
     <div
-      data-slot="alert"
       role="alert"
-      className={cn(alertVariants({ variant }), className)}
+      className={alertClasses + className}
       {...props}
-    />
+    >
+      {children}
+    </div>
   )
 }
 
-function AlertTitle({ className, ...props }) {
+function AlertTitle({ children, className = "", ...props }) {
   return (
-    <div
-      data-slot="alert-title"
-      className={cn(
-        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
-        className
-      )}
+    <h5
+      className={`font-medium mb-1 ${className}`}
       {...props}
-    />
+    >
+      {children}
+    </h5>
   )
 }
 
-function AlertDescription({ className, ...props }) {
+function AlertDescription({ children, className = "", ...props }) {
   return (
     <div
-      data-slot="alert-description"
-      className={cn(
-        "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
-        className
-      )}
+      className={`text-sm ${className}`}
       {...props}
-    />
+    >
+      {children}
+    </div>
   )
 }
 
