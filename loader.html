@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+
+   body{
+        background-color: rgb(0, 0, 0);
+    }
+    .text{
+        /* font-size: 1000px;
+         */
+        
+        display: flex;
+        justify-content: center;
+    }
+    svg path{
+        fill: transparent;
+        stroke: white;
+        stroke-width: 0.1;
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+        animation: textAnimation 4s ease-in-out 1 forwards;
+        height: 100px;
+    }
+    @keyframes textAnimation {
+        0% {
+            stroke-dashoffset: 50;
+        }
+        80% {
+            fill: transparent;
+        }
+        100% {
+            fill: white;
+            stroke-dashoffset: 0;
+        }
+    }
+    
+</style>

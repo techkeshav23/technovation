@@ -71,3 +71,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Loader Animation */
+@keyframes textAnimation {
+  0% {
+    stroke-dashoffset: 200;
+    fill: transparent;
+  }
+  70% {
+    stroke-dashoffset: 0;
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    fill: #f97316;
+    stroke: #f97316;
+  }
+}

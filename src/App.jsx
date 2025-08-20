@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button } from "./components/ui/button"
 import { Card, CardContent } from "./components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion"
@@ -8,8 +8,19 @@ import Domains from "./components/Domains"
 import Legacy from "./components/Legacy"
 import AboutUs from "./components/AboutUs"
 import Footer from "./components/Footer"
+import Loader from "./components/Loader"
 
 function App() {
+  const [showLoader, setShowLoader] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setShowLoader(false);
+  };
+
+  if (showLoader) {
+    return <Loader onComplete={handleLoaderComplete} />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       {/* Header */}
